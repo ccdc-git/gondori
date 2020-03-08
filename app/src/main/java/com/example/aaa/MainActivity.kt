@@ -297,7 +297,7 @@ class MainActivity : AppCompatActivity() {
         Log.v("final_datetimea",finish_datetime.toString())
         Log.v("total_service_datesa",total_service_dates.toString())
         Log.v("current_seniorityddf",current_seniority.toString())
-        Log.v("total_progress",total_progress.toString())
+        Log.v("total_progressll",total_progress.toString())
         Log.v("next_month_seniority",next_month_seniority.toString())
         Log.v("next_class_progress",next_class_progress.toString())
     }
