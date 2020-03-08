@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AAA</string>
+    <string name="profile_name">%s %s</string>
+    <string name="d_day">D-%d</string>
+    <string name="date_dot">%02d.%02d.%02d</string>
+    <string name="date_korean">%d년 %02d월 %02d일</string>
+    <string name="reduce_date">%d일이 단축되었습니다.</string>
+    <string name="seniority">%s %d호봉</string>
+    <string name="soldier">입대전_이병_일병_상병_병장_민간인_민간인</string>
+    <string name="police">입대전_이경_일경_상경_수경_민간인_민간인</string>
+    <string name="fire">입대전_이방_일방_상방_수방_민간인_민간인</string>
+</resources>

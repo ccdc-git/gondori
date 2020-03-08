@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="species_array">
+        <item>의무소방</item>
+        <item>육군</item>
+        <item>공군</item>
+        <item>해군</item>
+        <item>의무경찰</item>
+        <item>해양경찰</item>
+    </string-array>
+</resources>
