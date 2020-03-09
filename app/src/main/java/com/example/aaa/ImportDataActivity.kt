@@ -42,8 +42,8 @@ class ImportDataActivity : AppCompatActivity() {
 
 
         //군별 선택
-        val species_adapter = ArrayAdapter.createFromResource(this,R.array.species_array,android.R.layout.simple_spinner_dropdown_item)
-        species_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val species_adapter = ArrayAdapter.createFromResource(this,R.array.species_array,R.layout.my_spinner_layout)
+        species_adapter.setDropDownViewResource(R.layout.my_spinner_dropdown)
 
         TextView_inp_species.adapter = species_adapter
 

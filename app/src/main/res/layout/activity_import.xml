@@ -73,8 +73,10 @@
         android:layout_alignParentLeft="true"/>
     <Spinner
         android:id="@+id/TextView_inp_species"
+
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@drawable/spinner_background"
         android:layout_alignParentEnd="true"
         android:textSize="15sp"/>
     <!--
