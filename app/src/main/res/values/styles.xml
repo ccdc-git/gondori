@@ -12,6 +12,10 @@
     </style>
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
     </style>
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:listPreferredItemHeightSmall">30dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
 
 </resources>

@@ -1,21 +1,22 @@
 package com.example.aaa
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.LinearLayout
+import android.view.ContextThemeWrapper
+import android.view.MenuItem
+import android.widget.*
 import com.example.aaa.R.string.*
 import java.time.LocalDateTime
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
 import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,10 +51,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //preference
         val pref = getSharedPreferences("preference",MODE_PRIVATE)
+        if (pref.getBoolean("is_first",true)) {
+            val intent: Intent = Intent(this, ImportDataActivity::class.java)
+            startActivityForResult(intent, 1)
+        }
+        else{
+            whenStart()
+            handler = Handler()
+            mThread().run()
+        }
 
-        if (pref.getBoolean("is_first",true)){
-            val intent : Intent = Intent(this, ImportDataActivity::class.java)
-            startActivityForResult(intent,1)
+
+        Button_menu.setOnClickListener {
+            val context = ContextThemeWrapper(this,R.style.PopupMenu)
+            val popupMenu = PopupMenu(context,Button_menu)
+            popupMenu.menuInflater.inflate(R.menu.my_menu,popupMenu.menu)
+            val listener = object : PopupMenu.OnMenuItemClickListener{
+                override fun onMenuItemClick(item: MenuItem?): Boolean {
+                    return if (item != null) {
+                        if (item.itemId == R.id.menu_clear) {
+                            Log.v("menu","Clear Data")
+                            clearPref()
+                            val intent2 : Intent = Intent(this@MainActivity,ImportDataActivity::class.java)
+                            startActivityForResult(intent,1)
+                        }
+                        true
+                    } else false
+                }
+            }
+            popupMenu.setOnMenuItemClickListener(listener)
+
+            popupMenu.show()
         }
 
 
@@ -61,13 +89,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK){
+        if (resultCode == Activity.RESULT_OK){
+            Log.d("is_RESULT_OK","OK")
             import_info()
             whenStart()
             handler = Handler()
             val mthread : mThread = mThread()
             mthread.run()
-
+        }
+        else{
+            Log.d("is_RESULT_OK","not OK")
+            finish()
         }
     }
 
@@ -76,7 +108,6 @@ class MainActivity : AppCompatActivity() {
         val editor = pref.edit()
         //이름, 프로필, 군종, 단축일, 전체복무일, 전역일
         //진급일
-        //여기서 입력 todo
         var inp_user_name = pref.getString("inp_user_name","윤종선")
         var inp_species  = pref.getString("inp_species", "의무소방")
         var inp_start_date = pref.getString("inp_start_date","2018-08-09T14:00:00")
@@ -124,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         editor.putString("third_upgrade",third_upgrade.toString())
         editor.putString("finish_datetime",finish_datetime.toString())
         editor.putInt("total_service_dates",total_service_dates.toInt())
-        //editor.putBoolean("is_first",false)  //todo 업데이트
+        editor.putBoolean("is_first",false)
 
         editor.apply()
 
@@ -351,9 +382,6 @@ class MainActivity : AppCompatActivity() {
         return 0.0
     }
 
-    private fun refresh_dates(){ //날짜 갱신
-       // TODO("")
-    }
 
     inner class mThread : Thread(){
         override fun run() {
@@ -380,7 +408,8 @@ class MainActivity : AppCompatActivity() {
 
                 sleep(1)
                 handler?.post(this)
-                if (today.compareTo(LocalDate.now()) == 0){
+                if (today.compareTo(LocalDate.now()) != 0){
+                    today = LocalDate.now()
                     whenStart()
                 }
             }
@@ -421,7 +450,13 @@ class MainActivity : AppCompatActivity() {
         "공군" -> 24
         else -> 21
     }
-
+    private fun clearPref(){
+        val pref = getSharedPreferences("preference",MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.clear()
+        editor.putBoolean("is_first",true)
+        editor.commit()
+    }
 
 
 

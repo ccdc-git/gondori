@@ -8,4 +8,8 @@
         <item>의무경찰</item>
         <item>해양경찰</item>
     </string-array>
+    <string-array name="menu_array">
+        <item>프로필 삭제</item>
+        <item>이것</item>
+    </string-array>
 </resources>

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_import.*
 import java.time.LocalDate
 
 class ImportDataActivity : AppCompatActivity() {
-
+    var is_RESULT_OK = 0
     //포커스 해제해주는 부분
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev?.action  == MotionEvent.ACTION_DOWN){
@@ -54,24 +54,21 @@ class ImportDataActivity : AppCompatActivity() {
                 TextView_startDate_btn.text = "%d.%02d.%02d".format(year, month + 1, dayOfMonth)
             }
         }
-        TextView_startDate_btn.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                Log.v("onClick", "yes")
-                val dpd = DatePickerDialog(
-                    this@ImportDataActivity,
-                    listener,
-                    LocalDate.now().year,
-                    LocalDate.now().monthValue,
-                    LocalDate.now().dayOfMonth
-                )
-                dpd.show()
-            }
-        })
+        TextView_startDate_btn.setOnClickListener {
+            Log.v("onClick", "yes")
+            val dpd = DatePickerDialog(
+                this@ImportDataActivity,
+                listener,
+                LocalDate.now().year,
+                LocalDate.now().monthValue,
+                LocalDate.now().dayOfMonth
+            )
+            dpd.show()
+        }
 
 
-                Button_start.setOnClickListener{v: View? ->
+        Button_start.setOnClickListener{v: View? ->
                     if (dataCheck()) {
-                        val intent = Intent(this, MainActivity::class.java)
                         val pref = getSharedPreferences("preference", MODE_PRIVATE)
                         val editor = pref.edit()
                         editor.putString("inp_user_name", TextView_inp_user_name.text.toString())
@@ -79,6 +76,7 @@ class ImportDataActivity : AppCompatActivity() {
                         editor.putString("inp_start_date", TextView_startDate_btn.text.toString())
                         editor.apply()
                         setResult(Activity.RESULT_OK, intent)
+                        is_RESULT_OK = 1
                         finish()
             }
         }
@@ -86,6 +84,13 @@ class ImportDataActivity : AppCompatActivity() {
     fun dataCheck() : Boolean{
 
         return true
+    }
+
+    override fun onDestroy() {
+        val intent = Intent(this, MainActivity::class.java)
+        if(is_RESULT_OK == 1) setResult(Activity.RESULT_OK, intent)
+        else setResult(Activity.RESULT_CANCELED,intent)
+        super.onDestroy()
     }
 
 }

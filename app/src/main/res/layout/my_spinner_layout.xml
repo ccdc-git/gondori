@@ -6,6 +6,7 @@
     android:textSize="15sp"
     style="?android:attr/spinnerItemStyle"
     android:singleLine="true"
+    android:textAlignment="viewEnd"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
