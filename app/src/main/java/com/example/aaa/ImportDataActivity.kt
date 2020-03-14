@@ -14,6 +14,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_import.*
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class ImportDataActivity : AppCompatActivity() {
     var is_RESULT_OK = 0
@@ -34,31 +37,21 @@ class ImportDataActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_import)
 
-
         //군별 선택
         val species_adapter = ArrayAdapter.createFromResource(this,R.array.species_array,R.layout.my_spinner_layout)
         species_adapter.setDropDownViewResource(R.layout.my_spinner_dropdown)
-
         TextView_inp_species.adapter = species_adapter
 
-
         //입대일 선택
-        val listener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-                TextView_startDate_btn.text = "%d.%02d.%02d".format(year, month + 1, dayOfMonth)
-            }
-        }
         TextView_startDate_btn.setOnClickListener {
             Log.v("onClick", "yes")
             val dpd = DatePickerDialog(
                 this@ImportDataActivity,
-                listener,
+                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth -> TextView_startDate_btn.text = "%d.%02d.%02d".format(year, month + 1, dayOfMonth) },
                 LocalDate.now().year,
                 LocalDate.now().monthValue,
                 LocalDate.now().dayOfMonth
@@ -73,7 +66,15 @@ class ImportDataActivity : AppCompatActivity() {
                         val editor = pref.edit()
                         editor.putString("inp_user_name", TextView_inp_user_name.text.toString())
                         editor.putString("inp_species", TextView_inp_species.selectedItem.toString())
-                        editor.putString("inp_start_date", TextView_startDate_btn.text.toString())
+                        editor.putString(
+                            "inp_start_date",
+                            LocalDateTime.of(
+                                LocalDate.parse(
+                                    TextView_startDate_btn.text, //2020.01.01
+                                    DateTimeFormatter.ofPattern("yyyy.MM.dd")),  //datetime formatter
+                                LocalTime.of(14,0,0) //입대시간
+                            ).toString()
+                        )
                         editor.apply()
                         val intent = Intent(this, MainActivity::class.java)
                         setResult(Activity.RESULT_OK, intent)
