@@ -3,5 +3,8 @@
     <item
         android:id="@+id/menu_clear"
         android:title="초기화"/>
+    <item
+        android:id="@+id/change_date"
+        android:title="수정"/>
 
 </menu>

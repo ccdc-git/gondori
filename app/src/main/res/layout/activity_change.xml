@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#463D3F"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="40dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "이름"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+        <EditText
+            android:id="@+id/TextView_change_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="#ffffff"
+            android:text="v111vv"
+            android:textSize="15sp"
+            android:layout_alignParentEnd="true"
+            android:maxLength="10"
+            android:imeOptions="actionDone"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "입대일"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/TextView_change_startDate_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:text="2018.08.09"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "군별"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+        <Spinner
+            android:id="@+id/Spinner_change_species"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/spinner_background"
+            android:layout_alignParentEnd="true"
+            android:textSize="15sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "일병 진급일"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/TextView_change_first_upgrade_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:text="2018.08.09"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "상병 진급일"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/TextView_change_second_upgrade_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:text="2018.08.09"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "병장 진급일"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/TextView_change_third_upgrade_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:text="2018.08.09"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "전역일"
+            android:textSize="15sp"
+            android:textColor="#73696B"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/TextView_change_finish_datetime_dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:text="2018.08.09"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#73696B"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/Button_change_start"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="시작하기"/>
+
+</LinearLayout>
+

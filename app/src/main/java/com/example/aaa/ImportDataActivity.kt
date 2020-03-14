@@ -75,6 +75,7 @@ class ImportDataActivity : AppCompatActivity() {
                         editor.putString("inp_species", TextView_inp_species.selectedItem.toString())
                         editor.putString("inp_start_date", TextView_startDate_btn.text.toString())
                         editor.apply()
+                        val intent = Intent(this, MainActivity::class.java)
                         setResult(Activity.RESULT_OK, intent)
                         is_RESULT_OK = 1
                         finish()
@@ -82,15 +83,22 @@ class ImportDataActivity : AppCompatActivity() {
         }
     }
     fun dataCheck() : Boolean{
-
         return true
     }
 
     override fun onDestroy() {
         val intent = Intent(this, MainActivity::class.java)
-        if(is_RESULT_OK == 1) setResult(Activity.RESULT_OK, intent)
-        else setResult(Activity.RESULT_CANCELED,intent)
+        Log.v("is_RESULT_OK",is_RESULT_OK.toString())
+        if(is_RESULT_OK != 1) setResult(Activity.RESULT_CANCELED,intent)
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        Log.v("is_RESULT_OK",is_RESULT_OK.toString())
+        setResult(Activity.RESULT_CANCELED,intent)
+
+        super.onBackPressed()
     }
 
 }

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.ContextThemeWrapper
-import android.view.MenuItem
 import android.widget.*
 import com.example.aaa.R.string.*
 import java.time.LocalDateTime
@@ -61,26 +60,27 @@ class MainActivity : AppCompatActivity() {
             mThread().run()
         }
 
-
+        //메뉴버튼(초기화, 변경)
         Button_menu.setOnClickListener {
             val context = ContextThemeWrapper(this,R.style.PopupMenu)
             val popupMenu = PopupMenu(context,Button_menu)
             popupMenu.menuInflater.inflate(R.menu.my_menu,popupMenu.menu)
-            val listener = object : PopupMenu.OnMenuItemClickListener{
-                override fun onMenuItemClick(item: MenuItem?): Boolean {
-                    return if (item != null) {
-                        if (item.itemId == R.id.menu_clear) {
-                            Log.v("menu","Clear Data")
-                            clearPref()
-                            val intent2 : Intent = Intent(this@MainActivity,ImportDataActivity::class.java)
-                            startActivityForResult(intent,1)
-                        }
-                        true
-                    } else false
-                }
-            }
-            popupMenu.setOnMenuItemClickListener(listener)
-
+            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                if (item != null) {
+                    is_running = false  //다른 화면 넘어갈때 쓰레드 멈춤
+                    if (item.itemId == R.id.menu_clear) {
+                        Log.v("menu","Clear Data")
+                        clearPref()
+                        val intent2 : Intent = Intent(this@MainActivity,ImportDataActivity::class.java)
+                        startActivityForResult(intent2,1)
+                    }else if (item.itemId == R.id.change_date) {
+                        Log.v("menu","change_date")
+                        val intent2 : Intent = Intent(this@MainActivity,ChangeDataActivity::class.java)
+                        startActivityForResult(intent2,2)
+                    }
+                    return@OnMenuItemClickListener true
+                } else return@OnMenuItemClickListener false
+            })
             popupMenu.show()
         }
 
@@ -89,21 +89,35 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK){
-            Log.d("is_RESULT_OK","OK")
-            import_info()
-            whenStart()
-            handler = Handler()
-            val mthread : mThread = mThread()
-            mthread.run()
+        if (requestCode == 1) { //값 불러오기
+            if(resultCode == Activity.RESULT_OK){
+                Log.d("is_RESULT_OK", "import_OK")
+                importInfo()  //기본값 계산
+                whenStart()
+                is_running = true //쓰레드 다시 시작
+                mThread().run()
+            }else {
+                Log.d("is_RESULT_OK","import canceled")
+                finish()
+            }
+        } else if (requestCode == 2) {  //값 수정
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("is_RESULT_OK", "change_OK")
+                whenStart()
+                is_running = true //쓰레드 다시 시작
+                mThread().run()
+            }else {
+                Log.d("is_RESULT_OK","Change canceled")
+                is_running = true //쓰레드 다시 시작
+                mThread().run()
+            }
         }
-        else{
-            Log.d("is_RESULT_OK","not OK")
-            finish()
-        }
+        handler = Handler()
+        mThread().run()
+        Log.d("is_RESULT_OK", resultCode.toString())
     }
 
-    private fun import_info() {
+    private fun importInfo() {
         val pref = getSharedPreferences("preference",MODE_PRIVATE)
         val editor = pref.edit()
         //이름, 프로필, 군종, 단축일, 전체복무일, 전역일
@@ -111,10 +125,7 @@ class MainActivity : AppCompatActivity() {
         var inp_user_name = pref.getString("inp_user_name","윤종선")
         var inp_species  = pref.getString("inp_species", "의무소방")
         var inp_start_date = pref.getString("inp_start_date","2018-08-09T14:00:00")
-/*
-        var inp_user_name = "윤종선"
-        var inp_species  = "의무소방"
-        var inp_start_date = "2018-08-09T14:00:00"*/
+
 
         val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
         val start_datetime = LocalDateTime.of(LocalDate.parse(inp_start_date,formatter),LocalTime.of(14,0,0))
@@ -159,13 +170,13 @@ class MainActivity : AppCompatActivity() {
 
         editor.apply()
 
-/*
+
         Log.v("reduce_dates",reduce_dates.toString())
         Log.v("first_upgrade",first_upgrade.toString())
         Log.v("second_upgrade",second_upgrade.toString())
         Log.v("third_upgrade",third_upgrade.toString())
-        Log.v("final_datetime",final_datetime.toString())
-        Log.v("total_service_dates",total_service_dates.toString())*/
+        Log.v("finish_datetime",finish_datetime.toString())
+        Log.v("total_service_dates",total_service_dates.toString())
     }
 
     private fun whenStart() {
@@ -178,7 +189,18 @@ class MainActivity : AppCompatActivity() {
         val third_upgrade = LocalDateTime.parse(pref.getString("third_upgrade","fail_third_upgrade"))
         val finish_datetime = LocalDateTime.parse(pref.getString("finish_datetime","fail_finish_datetime"))
         val total_service_dates = pref.getInt("total_service_dates",-1)
-        val reduce_dates = pref.getInt("reduce_dates",-1)
+
+
+
+        //단축일 계산
+        var service_months = service_months(species)
+        val reduce_standard = LocalDateTime.parse("2018-10-01T00:00:00").minusMonths(service_months.toLong()).plusDays(2)
+        var reduce_dates = if(start_datetime.compareTo(reduce_standard)<0) 0
+        else (ChronoUnit.DAYS.between(reduce_standard,start_datetime) / 14 + 1).toInt()
+        if(reduce_dates > 90){
+            reduce_dates = 0
+        }
+
 /*
     current_class   1
     due_finish_dates    1
@@ -235,7 +257,6 @@ class MainActivity : AppCompatActivity() {
 
         var next_month_seniority = 0
         var next_month_class_int = 0
-        var next_serniority_date = null
         if (next_month_firstday.compareTo(next_class_datetime.toLocalDate()) >= 0) { //다음 달 1일이 진급일이면
             next_month_seniority = 1
             next_month_class_int = next_class_int
@@ -310,30 +331,29 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+        //실시간 갱신 부분을 위해 저장
         val editor = pref.edit()
         editor.putString("current_seniority_datetime",current_seniority_datetime.toString())
         editor.putString("next_seniority_datetime",next_seniority_datetime.toString())
         editor.putString("current_class_datetime",current_class_datetime.toString())
         editor.putString("next_class_datetime",next_class_datetime.toString())
-
         editor.apply()
 
 
 
-        Log.v("reduce_datesa",reduce_dates.toString())
-        Log.v("first_upgradea",first_upgrade.toString())
-        Log.v("second_upgradeaa",second_upgrade.toString())
-        Log.v("third_upgradea",third_upgrade.toString())
-        Log.v("final_datetimea",finish_datetime.toString())
-        Log.v("total_service_datesa",total_service_dates.toString())
-        Log.v("current_seniorityddf",current_seniority.toString())
-        Log.v("total_progressll",total_progress.toString())
+        Log.v("reduce_dates",reduce_dates.toString())
+        Log.v("first_upgrade",first_upgrade.toString())
+        Log.v("second_upgrade",second_upgrade.toString())
+        Log.v("third_upgrade",third_upgrade.toString())
+        Log.v("finish_datetime",finish_datetime.toString())
+        Log.v("total_service_dates",total_service_dates.toString())
+        Log.v("current_seniority",current_seniority.toString())
+        Log.v("total_progress",total_progress.toString())
         Log.v("next_month_seniority",next_month_seniority.toString())
         Log.v("next_class_progress",next_class_progress.toString())
     }
 
-    private fun refresh_total_progress() : Double { //진행율 갱신
+    private fun refreshTotalProgress() : Double { //진행율 갱신
         val pref = getSharedPreferences("preference",MODE_PRIVATE)
         try {
             val start_datetime =
@@ -349,7 +369,7 @@ class MainActivity : AppCompatActivity() {
         }
         return 0.0
     }
-    private fun refresh_seniority_progress() : Double { //진행율 갱신
+    private fun refreshSeniorityProgress() : Double { //진행율 갱신
         val pref = getSharedPreferences("preference",MODE_PRIVATE)
         try {
             val current_seniority_datetime =
@@ -365,7 +385,7 @@ class MainActivity : AppCompatActivity() {
         }
         return 0.0
     }
-    private fun refresh_class_progress() : Double { //진행율 갱신
+    private fun refreshClassProgress() : Double { //진행율 갱신
         val pref = getSharedPreferences("preference",MODE_PRIVATE)
         try {
             val current_class_datetime =
@@ -385,30 +405,26 @@ class MainActivity : AppCompatActivity() {
 
     inner class mThread : Thread(){
         override fun run() {
-
-            val total_progress = refresh_total_progress()
+            //전체 진행율
+            val total_progress = refreshTotalProgress()
             progress_horizontal_total.progress = (total_progress * 1000000000).toInt()
             (View_totalProgress.layoutParams as LinearLayout.LayoutParams).weight = (total_progress * 100).toFloat()
             TextView_Progressbar_totalProgress.text = "%.7f%%".format(total_progress * 100)
-
-            val next_seniority_progress = refresh_seniority_progress()
+            //다음 호봉 진행율
+            val next_seniority_progress = refreshSeniorityProgress()
             ProgressBar_nextSeniority.progress = (next_seniority_progress * 1000000000).toInt()
             TextView_nextSeniority_progress.text = "%.6f".format(next_seniority_progress*100)
             (View_nextSeniority.layoutParams as LinearLayout.LayoutParams).weight = ((next_seniority_progress*100).toFloat())
-
-            val next_class_progress = refresh_class_progress()
+            //다음 계급 진행율
+            val next_class_progress = refreshClassProgress()
             ProgressBar_nextClasses.progress = (next_class_progress * 1000000000).toInt()
             TextView_nextClasses_progress.text = "%.6f".format(next_class_progress*100)
             (View_nextClasses.layoutParams as LinearLayout.LayoutParams).weight = ((next_class_progress*100).toFloat())
-
-
-
-
+            //계속 할건지 판단
             if(is_running){
-
                 sleep(1)
                 handler?.post(this)
-                if (today.compareTo(LocalDate.now()) != 0){
+                if (today.compareTo(LocalDate.now()) != 0){ //날짜 변경시 다시 계산
                     today = LocalDate.now()
                     whenStart()
                 }
@@ -418,25 +434,8 @@ class MainActivity : AppCompatActivity() {
 
 
         override fun onDestroy() {
-            super.onDestroy()
             is_running = false
-
-    }
-
-    fun doCalculate_date() {
-        /*
-        2. 날짜계산
-            - 전역일
-            - 단축일  입대일 기준 2017-01-03부터 14일에 1일 단축
-            - 디데이
-            - 현재호봉, 현재계급
-            - 다음호봉(계급) 날짜
-            - 퍼센트
-        */
-        val now_DateTime = LocalDateTime.now()
-    }
-    fun doWork_date(){
-
+            super.onDestroy()
     }
 
     private fun classes(species: String?) : List<String> = when(species){
@@ -455,7 +454,7 @@ class MainActivity : AppCompatActivity() {
         val editor = pref.edit()
         editor.clear()
         editor.putBoolean("is_first",true)
-        editor.commit()
+        editor.apply()
     }
 
 
