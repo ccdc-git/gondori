@@ -17,17 +17,19 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_alignTop="@id/Button_menu"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="20dp"
+            android:paddingTop="10dp"
             android:paddingHorizontal="20dp">
                 <ImageView
                     android:id="@+id/ImageView_profile_picture"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
                     android:background="@null"
                     android:src="@mipmap/profile"/>
                 <LinearLayout
@@ -94,7 +96,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@drawable/bg_topround"
             android:layout_marginHorizontal="20dp"
             android:weightSum="2"
@@ -130,6 +132,7 @@
                     android:id="@+id/ImageView_classes_image"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
+                    android:src="@null"
                     android:background="@null"/>
                 <TextView
                     android:id="@+id/TextView_current_seniority"
@@ -147,7 +150,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:background="#53494B">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -169,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/progress_horizontal_total"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:textSize="17dp"
                     android:text="전역"
                     android:textColor="#ffffff"/>
@@ -179,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/progress_horizontal_total"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/date_korean"
                     android:textColor="#ffffff"/>
                 <LinearLayout
@@ -200,7 +203,7 @@
                         android:textColor="#ffffff"
                         android:text="0.0%"
                         android:layout_below="@id/progress_horizontal_total"
-                        android:layout_marginTop="5dp"/>
+                        android:layout_marginTop="7dp"/>
                 </LinearLayout>
 
 
@@ -212,7 +215,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:background="#463D3F"
             android:weightSum="2">
             <RelativeLayout
@@ -236,7 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/ProgressBar_nextSeniority"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:text="다음 호봉"
                     android:textSize="15dp"
                     android:textColor="#ffffff"/>
@@ -254,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/ProgressBar_nextSeniority"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/seniority"
                     android:textColor="#ffffff"
                     android:textSize="13dp"
@@ -277,7 +280,7 @@
                         android:textColor="#ffffff"
                         android:text="0.0%"
                         android:layout_below="@id/ProgressBar_nextSeniority"
-                        android:layout_marginTop="5dp"/>
+                        android:layout_marginTop="7dp"/>
                 </LinearLayout>
 
 
@@ -305,7 +308,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/ProgressBar_nextClasses"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:text="다음 계급"
                     android:textSize="15dp"
                     android:textColor="#ffffff"/>
@@ -323,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/ProgressBar_nextClasses"
-                    android:layout_marginBottom="2dp"
+                    android:layout_marginBottom="4dp"
                     android:text="민간인"
                     android:textColor="#ffffff"
                     android:textSize="13dp"
@@ -346,7 +349,7 @@
                         android:textColor="#ffffff"
                         android:text="0.0%"
                         android:layout_below="@id/ProgressBar_nextClasses"
-                        android:layout_marginTop="5dp"/>
+                        android:layout_marginTop="7dp"/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -366,14 +369,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginHorizontal="17dp"
-                        android:layout_marginVertical="10dp">
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="7dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:text="전체 복무일"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <TextView
                             android:id="@+id/TextView_summery_totalDate"
@@ -381,7 +384,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:text="652"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
 
                     </RelativeLayout>
@@ -399,14 +402,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginHorizontal="17dp"
-                        android:layout_marginVertical="10dp">
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="7dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:text="현재 복무일"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <TextView
                             android:id="@+id/TextView_summery_currentDate"
@@ -414,7 +417,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:text="571"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <!---->
                     </RelativeLayout>
@@ -433,14 +436,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginHorizontal="17dp"
-                        android:layout_marginVertical="10dp">
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="7dp">
                         <TextView
+                            android:id="@+id/TextView_summery_nextClassesDate_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:text="다음 진급일"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <TextView
                             android:id="@+id/TextView_summery_nextClassesDate"
@@ -448,7 +452,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:text="81"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <!---->
                     </RelativeLayout>
@@ -467,14 +471,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginHorizontal="17dp"
-                        android:layout_marginVertical="10dp">
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="7dp">
                         <TextView
+                            android:id="@+id/TextView_summery_restDate_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:text="남은 복무일"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <TextView
                             android:id="@+id/TextView_summery_restDate"
@@ -482,7 +487,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:text="81"
-                            android:textSize="17dp"
+                            android:textSize="15sp"
                             android:textColor="#000000"/>
                         <!---->
                     </RelativeLayout>

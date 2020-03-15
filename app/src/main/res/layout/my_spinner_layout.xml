@@ -3,7 +3,7 @@
     android:layoutDirection="ltr"
     android:id="@android:id/text1"
     android:textColor="#ffffff"
-    android:textSize="15sp"
+    android:textSize="@dimen/import_textSize"
     style="?android:attr/spinnerItemStyle"
     android:singleLine="true"
     android:textAlignment="viewEnd"

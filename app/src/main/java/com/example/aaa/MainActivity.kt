@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
@@ -164,11 +163,19 @@ class MainActivity : AppCompatActivity() {
             now_datetime < finish_datetime -> 4
             else -> 5
         }
+
+        // 입대전(0), 민간인(5)처리
+        val notConscripted = now_datetime < start_datetime
+        val finishConscripted = start_datetime < now_datetime
+
+        //
+
         val next_class_int = current_class_int + 1
         val current_class = classes(species)[current_class_int]
         val next_class = classes(species)[next_class_int]
 
-        val due_finish_dates = ChronoUnit.DAYS.between(now_datetime.toLocalDate(),finish_datetime.toLocalDate())
+        val due_finish_dates = if(finishConscripted) 0
+        else ChronoUnit.DAYS.between(now_datetime.toLocalDate(),finish_datetime.toLocalDate()).toInt()
 
         val current_class_datetime = when(current_class_int){
             0 -> start_datetime
@@ -204,14 +211,29 @@ class MainActivity : AppCompatActivity() {
         }
         val next_month_class = classes(species)[next_month_class_int]
 
-        val next_seniority_datetime = if(next_month_firstday.compareTo(finish_datetime.toLocalDate()) >= 0 && now_datetime.toLocalDate().compareTo(finish_datetime.toLocalDate()) <= 0) finish_datetime
-        else LocalDateTime.of(next_month_firstday, LocalTime.of(0,0,0))
-        val current_seniority_datetime = if(now_datetime.toLocalDate().compareTo(start_datetime.toLocalDate().plusMonths(1).withDayOfMonth(1))<0) start_datetime
-        else now_datetime.withDayOfMonth(1).with(LocalTime.of(0,0,0))
+        val next_seniority_datetime = when {
+            notConscripted -> now_datetime.plusDays(1)
+            finishConscripted -> now_datetime.minusDays(1)
+            else ->
+                if (next_month_firstday >= finish_datetime.toLocalDate() && now_datetime.toLocalDate() <= finish_datetime.toLocalDate()) finish_datetime
+                else LocalDateTime.of(next_month_firstday, LocalTime.of(0, 0, 0))
+        }
+        val current_seniority_datetime = when {
+            notConscripted -> now_datetime.plusDays(1)
+            finishConscripted -> now_datetime.minusDays(1)
+            else ->
+                if (now_datetime.toLocalDate() < start_datetime.toLocalDate().plusMonths(1).withDayOfMonth(1)) start_datetime
+                else now_datetime.withDayOfMonth(1).with(LocalTime.of(0, 0, 0))
+        }
 
-        val current_service_dates = ChronoUnit.DAYS.between(start_datetime.toLocalDate(),now_datetime.toLocalDate())
+        val current_service_dates : Int = when {
+            notConscripted -> 0
+            finishConscripted -> total_service_dates
+            else -> ChronoUnit.DAYS.between(start_datetime.toLocalDate(),now_datetime.toLocalDate()).toInt()
+        }
 
-        val due_next_class_dates = ChronoUnit.DAYS.between(now_datetime.toLocalDate(),next_class_datetime.toLocalDate())
+        val due_next_class_dates = if(finishConscripted) 0
+        else ChronoUnit.DAYS.between(now_datetime.toLocalDate(),next_class_datetime.toLocalDate())
 
         val classes_image_resorce = if (species == "의무경찰") if (current_class_int in 1..4) R.mipmap.police
                                                                     else null
@@ -235,17 +257,31 @@ class MainActivity : AppCompatActivity() {
         TextView_profile_finishDate.text = getText(date_dot).toString().format(finish_datetime.year,finish_datetime.monthValue,finish_datetime.dayOfMonth)
         TextView_profile_reduceDate.text = getText(reduce_date).toString().format(reduce_dates)
 
-        TextView_D_day.text = getText(R.string.d_day).toString().format(due_finish_dates)
+        if(notConscripted || finishConscripted){
+            TextView_D_day.text = ""
+            TextView_current_seniority.text = current_class
+
+            TextView_nextSeniority.text = ""
+            TextView_nextSeniority_date.text = ""
+        }
+        else{
+            TextView_D_day.text = getText(R.string.d_day).toString().format(due_finish_dates)
+            TextView_current_seniority.text = getText(seniority).toString().format(current_class,current_seniority)
+
+            TextView_nextSeniority.text = getText(seniority).toString().format(next_month_class,next_month_seniority)
+            TextView_nextSeniority_date.text = getText(date_dot).toString().format(next_seniority_datetime.year,next_seniority_datetime.monthValue,next_seniority_datetime.dayOfMonth)
+        }
+
         if (classes_image_resorce != null){
         ImageView_classes_image.setImageResource(classes_image_resorce)
         }
-        TextView_current_seniority.text = getText(seniority).toString().format(current_class,current_seniority)
+
 
         TextView_progressbar_finishDate.text = getText(date_korean).toString().format(finish_datetime.year,finish_datetime.monthValue,finish_datetime.dayOfMonth)
 
 
-        TextView_nextSeniority.text = getText(seniority).toString().format(next_month_class,next_month_seniority)
-        TextView_nextSeniority_date.text = getText(date_dot).toString().format(next_seniority_datetime.year,next_seniority_datetime.monthValue,next_seniority_datetime.dayOfMonth)
+        //TextView_nextSeniority.text = getText(seniority).toString().format(next_month_class,next_month_seniority)
+        //TextView_nextSeniority_date.text = getText(date_dot).toString().format(next_seniority_datetime.year,next_seniority_datetime.monthValue,next_seniority_datetime.dayOfMonth)
 
 
         TextView_nextClasses.text = next_class
@@ -256,6 +292,14 @@ class MainActivity : AppCompatActivity() {
         TextView_summery_currentDate.text = current_service_dates.toString()
         TextView_summery_nextClassesDate.text = due_next_class_dates.toString()
         TextView_summery_restDate.text = due_finish_dates.toString()
+        if (notConscripted){
+            TextView_summery_nextClassesDate_title.text = "언제가고"
+            TextView_summery_restDate_title.text = "언제오나"
+        }else{
+            TextView_summery_nextClassesDate_title.text = "다음 진급일"
+            TextView_summery_restDate_title.text = "남은 복무일"
+
+        }
 
 
 
@@ -267,8 +311,10 @@ class MainActivity : AppCompatActivity() {
         editor.putString("next_class_datetime",next_class_datetime.toString())
         editor.apply()
 
-
-
+        Log.v("current_seniority_datetime",current_seniority_datetime.toString())
+        Log.v("next_seniority_datetime",next_seniority_datetime.toString())
+        Log.v("current_class_datetime",current_class_datetime.toString())
+        Log.v("next_class_datetime",next_class_datetime.toString())
         Log.v("reduce_dates",reduce_dates.toString())
         Log.v("first_upgrade",first_upgrade.toString())
         Log.v("second_upgrade",second_upgrade.toString())
@@ -311,19 +357,23 @@ class MainActivity : AppCompatActivity() {
         private fun refreshProgress(startKey : String, finishKey : String) : Double { //진행율 갱신
             val pref = getSharedPreferences("preference",MODE_PRIVATE)
             try {
-                val start_datetime =
+                val startDatetime =
                     LocalDateTime.parse(pref.getString(startKey, "fail_$startKey"))
-                val finish_datetime =
+                val finishDatetime =
                     LocalDateTime.parse(pref.getString(finishKey, "fail_$finishKey"))
-                val now_datetime = LocalDateTime.now()
-                val total_progress = ChronoUnit.MILLIS.between(start_datetime,now_datetime).toDouble() / ChronoUnit.MILLIS.between(start_datetime,finish_datetime)
-                return  total_progress
-            }catch (e:DateTimeException){
+                val nowDatetime = LocalDateTime.now()
+                var totalProgress = ChronoUnit.MILLIS.between(startDatetime,nowDatetime).toDouble() / ChronoUnit.MILLIS.between(startDatetime,finishDatetime)
+                if (0 > totalProgress){
+                    totalProgress = 0.0
+                }else if(totalProgress > 1 ) {
+                    totalProgress = 1.0
+                }
+                return totalProgress
+            }catch (e: DateTimeException){
                 Log.d("Exception","fail to get datetime in refreshProgress($startKey, $finishKey)")
             }
             return 0.0
         }
-
     }
 
 

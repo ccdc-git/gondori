@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#463D3F"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="40dp"
+    android:paddingHorizontal="30dp"
+    android:paddingVertical="50dp"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android" >
@@ -14,9 +14,9 @@
         android:layout_height="30dp">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text = "이름"
-            android:textSize="15sp"
+            android:textSize="@dimen/import_textSize"
             android:textColor="#73696B"
             android:layout_alignParentLeft="true"/>
         <EditText
@@ -25,8 +25,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:textColor="#ffffff"
-            android:text="v111vv"
-            android:textSize="15sp"
+            android:text="서지원"
+            android:textSize="@dimen/import_textSize"
             android:layout_alignParentEnd="true"
             android:maxLength="10"
             android:imeOptions="actionDone"/>
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text = "입대일"
-        android:textSize="15sp"
+        android:textSize="@dimen/import_textSize"
         android:textColor="#73696B"
         android:layout_alignParentLeft="true"/>
     <TextView
@@ -51,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="#ffffff"
-        android:text="2018.08.09"
-        android:textSize="15sp"
+        android:text="2019.03.21"
+        android:textSize="@dimen/import_textSize"
         android:layout_alignParentEnd="true"
         android:clickable="true"/>
 </RelativeLayout>
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text = "군별"
-        android:textSize="15sp"
+        android:textSize="@dimen/import_textSize"
         android:textColor="#73696B"
         android:layout_alignParentLeft="true"/>
     <Spinner
@@ -77,7 +77,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/spinner_background"
         android:layout_alignParentEnd="true"
-        android:textSize="15sp"/>
+        android:textSize="@dimen/import_textSize"/>
 
 </RelativeLayout>
     <View
@@ -88,7 +88,8 @@
         android:id="@+id/Button_start"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="시작하기"/>
+        android:text="시작하기"
+        android:textSize="@dimen/import_textSize"/>
 
 
 

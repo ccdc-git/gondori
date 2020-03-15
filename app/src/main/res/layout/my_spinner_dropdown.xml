@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="5dp"
-    android:textSize="15sp"
+    android:textSize="@dimen/import_textSize"
     android:textColor="#ffffff"
     android:background="#53494B"
     android:textAlignment="viewEnd"
