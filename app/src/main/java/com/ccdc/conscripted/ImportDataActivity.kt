@@ -1,4 +1,4 @@
-package com.example.aaa
+package com.ccdc.conscripted
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,24 @@ class ImportDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_import)
 
+        //이름 입력
+        EditText_inp_user_name.imeOptions = IME_ACTION_DONE
+        EditText_inp_user_name.setOnEditorActionListener { v, actionId, event ->
+            Log.v("actionId",actionId.toString())
+            when(actionId){
+                IME_ACTION_DONE -> if(currentFocus is EditText) {
+                    if(currentFocus is EditText){
+                        val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(EditText_inp_user_name.windowToken,0)
+                        (currentFocus as EditText).clearFocus()
+                    }
+                    return@setOnEditorActionListener true
+                }
+                else -> return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+
         //군별 선택
         val species_adapter = ArrayAdapter.createFromResource(this,R.array.species_array,R.layout.my_spinner_layout)
         species_adapter.setDropDownViewResource(R.layout.my_spinner_dropdown)
@@ -53,7 +72,7 @@ class ImportDataActivity : AppCompatActivity() {
                 this@ImportDataActivity,
                 DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth -> TextView_startDate_btn.text = "%d.%02d.%02d".format(year, month + 1, dayOfMonth) },
                 LocalDate.now().year,
-                LocalDate.now().monthValue,
+                LocalDate.now().monthValue-1,
                 LocalDate.now().dayOfMonth
             )
             dpd.show()
@@ -64,7 +83,7 @@ class ImportDataActivity : AppCompatActivity() {
                     if (dataCheck()) {
                         val pref = getSharedPreferences("preference", MODE_PRIVATE)
                         val editor = pref.edit()
-                        editor.putString("inp_user_name", TextView_inp_user_name.text.toString())
+                        editor.putString("inp_user_name", EditText_inp_user_name.text.toString())
                         editor.putString("inp_species", TextView_inp_species.selectedItem.toString())
                         editor.putString(
                             "inp_start_date",

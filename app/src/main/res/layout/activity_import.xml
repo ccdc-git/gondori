@@ -20,16 +20,16 @@
             android:textColor="#73696B"
             android:layout_alignParentLeft="true"/>
         <EditText
-            android:id="@+id/TextView_inp_user_name"
+            android:id="@+id/EditText_inp_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:inputType="text"
             android:textColor="#ffffff"
-            android:text="서지원"
+            android:text="홍길동"
             android:textSize="@dimen/import_textSize"
             android:layout_alignParentEnd="true"
-            android:maxLength="10"
-            android:imeOptions="actionDone"/>
+            android:maxLength="10"/>
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

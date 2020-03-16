@@ -1,4 +1,4 @@
-package com.example.aaa
+package com.ccdc.conscripted
 
 import org.junit.Test
 

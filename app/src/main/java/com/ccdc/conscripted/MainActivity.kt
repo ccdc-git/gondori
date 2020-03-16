@@ -1,4 +1,4 @@
-package com.example.aaa
+package com.ccdc.conscripted
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.widget.*
-import com.example.aaa.R.string.*
+import com.ccdc.conscripted.R.string.*
 import java.time.LocalDateTime
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.DateTimeException
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
         // 입대전(0), 민간인(5)처리
         val notConscripted = now_datetime < start_datetime
-        val finishConscripted = start_datetime < now_datetime
+        val finishConscripted = finish_datetime < now_datetime
 
         //
 

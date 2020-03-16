@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AAA</string>
+    <string name="app_name">언제오나</string>
     <string name="profile_name">%s %s</string>
     <string name="d_day">D-%d</string>
     <string name="date_dot">%02d.%02d.%02d</string>

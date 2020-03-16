@@ -1,4 +1,4 @@
-package com.example.aaa
+package com.ccdc.conscripted
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import java.time.LocalDateTime

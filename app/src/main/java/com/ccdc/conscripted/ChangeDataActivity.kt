@@ -1,15 +1,15 @@
-package com.example.aaa
+package com.ccdc.conscripted
 
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +30,24 @@ class ChangeDataActivity : AppCompatActivity() {
         setContentView(R.layout.activity_change)
 
         initiate("preference") //초기값 설정
+
+        EditText_change_user_name.imeOptions = EditorInfo.IME_ACTION_DONE
+        EditText_change_user_name.setOnEditorActionListener { v, actionId, event ->
+            Log.v("actionId",actionId.toString())
+            when(actionId){
+                EditorInfo.IME_ACTION_DONE -> if(currentFocus is EditText) {
+                    if(currentFocus is EditText){
+                        val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(EditText_change_user_name.windowToken,0)
+                        (currentFocus as EditText).clearFocus()
+                    }
+                    return@setOnEditorActionListener true
+                }
+                else -> return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+
 
         //끝내기 버튼
         Button_change_start.setOnClickListener{v: View? ->
@@ -54,7 +72,7 @@ class ChangeDataActivity : AppCompatActivity() {
         val finish_datetime = LocalDateTime.parse(pref.getString("finish_datetime","fail_finish_datetime"))
 
         //user_name
-        TextView_change_user_name.setText(user_name)
+        EditText_change_user_name.setText(user_name)
 
         //군별 선택
         val species_adapter = ArrayAdapter.createFromResource(this,R.array.species_array,R.layout.my_spinner_layout)
@@ -96,7 +114,7 @@ class ChangeDataActivity : AppCompatActivity() {
     private fun onClickAction() {
         MyOnClicked.initialize(
             this,
-            TextView_change_user_name.text.toString(),
+            EditText_change_user_name.text.toString(),
             Spinner_change_species.selectedItem.toString(),
             LocalDateTime.of(LocalDate.parse(TextView_change_startDate_dp.text,formatter),LocalTime.of(14,0,0)),
             "temp"
@@ -133,7 +151,7 @@ class ChangeDataActivity : AppCompatActivity() {
         //전체 복무일
         val total_service_dates = ChronoUnit.DAYS.between(start_datetime.toLocalDate(),finish_datetime.toLocalDate())
 
-        editor.putString("user_name",TextView_change_user_name.text.toString())
+        editor.putString("user_name",EditText_change_user_name.text.toString())
         editor.putString("species",Spinner_change_species.selectedItem.toString())
         editor.putString("start_datetime",start_datetime.toString())
         editor.putString("first_upgrade",first_upgrade.toString())
